@@ -149,9 +149,14 @@ def main():
 
         if query :
             st.session_state.conversation_history.add_user_message(query)  # Ajouter à l'historique
+            if "Donnez-moi un résumé du rapport" in query:
+                summary = "Le rapport Monographie sectorielle détaille le secteur des Datacenters au Maroc et dans le monde, en mettant en lumière le marché en pleine croissance, les technologies clés, et les stratégies de développement à l'échelle nationale et internationale. Il aborde l'essor du marché marocain des Datacenters, soulignant son potentiel de croissance grâce à la stratégie nationale du numérique et l'ambition du Maroc de devenir un hub technologique africain. Le document explore également les récents développements du secteur à l'échelle mondiale, y compris les tendances, les technologies de pointe, et l'importance des Datacenters dans la transformation digitale. Des analyses spécifiques sur l'infrastructure, les services offerts, et les défis tels que la sécurité des données et l'efficacité énergétique sont inclus, ainsi que des perspectives sur les opportunités d'investissement et les implications pour le futur du secteur."
+                st.session_state.conversation_history.add_ai_message(summary) 
+
 
         
-            messages = [
+            else:
+                messages = [
                 {
                     "role": "user",
                     "content": (
@@ -161,21 +166,19 @@ def main():
             ]
 
             # Appeler l'API OpenAI pour obtenir le résumé
-            response = openai.ChatCompletion.create(
+                response = openai.ChatCompletion.create(
                 model="gpt-4o-mini",
                 messages=messages
             )
 
             # Récupérer le contenu de la réponse
 
-            summary = response['choices'][0]['message']['content']
-            if "Donnez-moi un résumé du rapport" in query:
-                summary = "Le rapport Monographie sectorielle détaille le secteur des Datacenters au Maroc et dans le monde, en mettant en lumière le marché en pleine croissance, les technologies clés, et les stratégies de développement à l'échelle nationale et internationale. Il aborde l'essor du marché marocain des Datacenters, soulignant son potentiel de croissance grâce à la stratégie nationale du numérique et l'ambition du Maroc de devenir un hub technologique africain. Le document explore également les récents développements du secteur à l'échelle mondiale, y compris les tendances, les technologies de pointe, et l'importance des Datacenters dans la transformation digitale. Des analyses spécifiques sur l'infrastructure, les services offerts, et les défis tels que la sécurité des données et l'efficacité énergétique sont inclus, ainsi que des perspectives sur les opportunités d'investissement et les implications pour le futur du secteur."
-
+                summary = response['choices'][0]['message']['content']
+            
                 # Votre logique pour traiter les réponses
             #conversation_history.add_user_message(query)
             #conversation_history.add_ai_message(response)
-            st.session_state.conversation_history.add_ai_message(summary)  # Ajouter à l'historique
+                st.session_state.conversation_history.add_ai_message(summary)  # Ajouter à l'historique
             
             # Afficher la question et le résumé de l'assistant
             #conversation_history.add_user_message(query)
